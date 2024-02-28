@@ -1,0 +1,21 @@
+from .indexes import YT_CATEGORIES_INDEX
+from ..typing import YT_CATEGORY
+
+
+AUTOS_VEHICLES: YT_CATEGORY = "Autos & Vehicles"
+COMEDY: YT_CATEGORY = "Comedy"
+EDUCATION: YT_CATEGORY = "Education"
+ENTERTAINMENT: YT_CATEGORY = "Entertainment"
+FILM_ANIMATION: YT_CATEGORY = "Film & Animation"
+GAMING: YT_CATEGORY = "Gaming"
+HOWTO_STYLE: YT_CATEGORY = "Howto & Style"
+MUSIC: YT_CATEGORY = "Music"
+NEWS_POLITICS: YT_CATEGORY = "News & Politics"
+NONPROFITS_ACTIVISM: YT_CATEGORY = "Nonprofits & Activism"
+PEOPLE_BLOGS: YT_CATEGORY = "People & Blogs"
+PETS_ANIMALS: YT_CATEGORY = "Pets & Animals"
+SCINCE_TECHNOLOGY: YT_CATEGORY = "Scince & Technology"
+SPORTS: YT_CATEGORY = "Sports"
+TRAVEL_EVENTS: YT_CATEGORY = "Travel & Events"
+
+YT_CATEGORIES = tuple(YT_CATEGORIES_INDEX.keys())

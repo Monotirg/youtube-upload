@@ -1,0 +1,48 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+        "default": {
+            "format": "%(asctime)s [%(module)s] %(levelname)s: %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S"
+        },
+      "yt_default": {
+        "()": "yt_upload.loggers.logformatter.ConsoleFormatter"
+      },
+      "json": {
+        "()": "yt_upload.loggers.logformatter.JSONFormatter",
+        "fmt_keys": {
+          "timestamp": "timestamp",
+          "google_profile": "google_profile",
+          "video": "video",
+          "title": "title",
+          "level": "levelname",
+          "message": "message",
+          "event": "event",
+          "params": "params"
+        }
+      }
+    },
+    "handlers": {
+        "stderr": {
+            "class": "logging.StreamHandler",
+            "level": "WARNING",
+            "formatter": "default",
+            "stream": "ext://sys.stderr"
+        },
+        "console_output": {
+            "formatter": "yt_default",
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stdout"
+        }
+    },
+    "loggers": {
+         "yt_logger": {
+            "level": "INFO",
+            "handlers": [
+                "console_output"
+            ]
+         }
+    }
+}

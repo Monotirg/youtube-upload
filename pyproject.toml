@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "yt-upload"
+version = "0.1.0"
+description = ""
+authors = ["monotirg <monotirg@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+playwright = "^1.41.1"
+pydantic = "^2.6.0"
+pymediainfo = "^6.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
