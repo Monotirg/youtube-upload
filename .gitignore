@@ -155,15 +155,6 @@ cython_debug/
 # Poetry lock file
 poetry.lock
 
-# Temp google chrome cookies dir
-cookies/
-
-# Temp video for uploading test
-*.mp4
-
-# Google chrome User Data
-User Data
-
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore

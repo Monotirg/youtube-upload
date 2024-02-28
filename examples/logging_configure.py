@@ -26,7 +26,7 @@ async def main():
     }
 
 
-    async with channel(**logging_config) as upload:
+    async with channel(enable_logging=True, **logging_config) as upload:
         await upload.upload_video(video)
 
 
