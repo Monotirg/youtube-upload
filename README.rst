@@ -6,11 +6,11 @@ YouTube upload videos
 Key Features
 ============
 
-- `APIv3 <https://developers.google.com/youtube/>`_  is not used
-- All YouTube video settings are available
-- Logging uploading videos 
-- Supports Headless operation
-- Supports asynchronous videos upload
+- Not using `YouTube APIv3 <https://developers.google.com/youtube/>`_
+- Allowing customization of all YouTube video settings
+- Logging video uploads
+- Supports headless operation
+- Supports asynchronous video uploads
 
 
 Getting started
