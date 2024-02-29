@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["monotirg <monotirg@gmail.com>"]
 readme = "README.md"
+repository = "https://github.com/Monotirg/youtube-upload"
 
 [tool.poetry.dependencies]
 python = "^3.11"
