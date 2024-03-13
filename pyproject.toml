@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yt-upload"
-version = "0.1"
+version = "0.2"
 description = ""
 authors = ["monotirg <monotirg@gmail.com>"]
 readme = "README.md"
