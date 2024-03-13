@@ -112,7 +112,7 @@ class JSONFormatter(logging.Formatter):
              "timestamp": dt.datetime.fromtimestamp(
                 record.created, tz=dt.timezone.utc
             ).isoformat(),
-            "google_profile": getattr(record, "google_profile", None),
+            "youtube_channel": getattr(record, "youtube_channel", None),
             "level": record.levelname,
         }
 
@@ -139,15 +139,17 @@ class ConsoleFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord):
         date = dt.datetime.fromtimestamp(record.created)
         date = date.strftime("%Y-%m-%d %H:%M:%S")
-        google_proflie = getattr(record, "google_profile")
+        youtube_channel = getattr(record, "youtube_channel")
         level = record.levelname
 
-        start_message = "%s [Google Profile: %s]" % (date, google_proflie)
+        start_message = "%s [YouTube Channel: %s]" % (date, youtube_channel)
         
         if hasattr(record, "video"):
             video = getattr(record, "video")
-            start_message += " [Video: %s, Title: %s] %s" % (video['path'],
-                                                             video['title'], level)
+            start_message += (
+                " [Video: %s, Title: %s] %s" 
+                % (video['path'], video['title'], level)
+            )
         else:
             start_message += " %s" % level
 

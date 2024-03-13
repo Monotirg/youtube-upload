@@ -32,17 +32,17 @@ class Channel:
     def __init__(
         self,
         user_data_dir: str,
-        profile: str,
+        google_profile: str,
         cookies_path: str,
     ) -> None:
         self.user_data_dir = to_abs_path(user_data_dir)
-        self.profile_path = to_abs_path(os.path.join(self.user_data_dir, profile))
+        self.profile_path = to_abs_path(os.path.join(self.user_data_dir, google_profile))
         self.cookies_path = to_abs_path(cookies_path)
 
         with open(self.cookies_path, encoding="utf-8") as f:
             self.yt_cookies = Cookies(cookies=json.loads(f.read()))
 
-        self.profile = profile
+        self.profile = google_profile
 
     async def start(self):
         self.playwright = await async_playwright().start()
@@ -58,13 +58,14 @@ class Channel:
                 f"--profile-directory={self.profile}",
             ],
         )
+        await self.context.add_cookies(self.yt_cookies.model_dump())
         
         self.logger.info("Start playwright", extra=logadapter(
             playwright_settings = (
                 self.context._impl_obj._options 
                 | {"executable_path": self.context._impl_obj._parent.executable_path, }
             ),
-            google_profile=self.profile
+            youtube_channel=self.youtube_channel
         ))
     
         page = await self.context.new_page()
@@ -74,9 +75,9 @@ class Channel:
 
         if not (self.change_language_to_eng or language == "en"):
             msg = (f"YouTube language is '{language}', "
-                   f"need to change YouTube language to English. "
-                   f"Use either set change_language_to_eng = True "
-                   f"or do it manually in YouTube settings.")
+                   "need to change YouTube language to English. "
+                   "Use either set change_language_to_eng = True "
+                   "or do it manually in YouTube settings.")
             raise YTError(msg)
         elif self.change_language_to_eng and not language == "en":
             await studio_page.change_language_to_eng()
@@ -85,7 +86,7 @@ class Channel:
 
     async def stop(self):
         self.logger.info("Clear YouTube local cache", extra=logadapter(
-            google_profile=self.profile
+            youtube_channel=self.youtube_channel
         ))
         remove_indexddb_cache_files(self.profile_path)
 
@@ -95,7 +96,7 @@ class Channel:
     async def _update_cookies(self):
         cookies = await self.context.cookies(self.studio_url)
         self.logger.info("Update YouTube cookies", extra=logadapter(
-            google_profile=self.profile
+            youtube_channel=self.youtube_channel
         ))
         self.yt_cookies.update_cookies(cookies)
         self.yt_cookies.save_cookies(self.cookies_path)
@@ -104,11 +105,11 @@ class Channel:
         page = await self.context.new_page()
         
         self.logger.info("Start upload video", extra=logadapter(
-            google_profile=self.profile, 
+            youtube_channel=self.youtube_channel, 
             youtube_video_settigns=video.model_dump(),
         ))
         self.log_data = {
-            "google_profile": self.profile,
+            "youtube_channel": self.youtube_channel,
             "video": {
                 "path": video.video_path,
                 "title": video.title
@@ -122,7 +123,7 @@ class Channel:
     
     async def __upload_video_call(self, video):
         log_data = {
-            "google_profile": self.profile,
+            "youtube_channel": self.youtube_channel,
             "video": {
                 "path": video.video_path,
                 "title": video.title
@@ -147,15 +148,32 @@ class Channel:
 
         for task in asyncio.as_completed(tasks):
                 await task
-            
+
+    # i hate fucking Google for this verification
+    # thats why the decision is just as fucking fuck
+    # mb later (never) i'll fix it
+    # noqa
+    async def verification(self):
+        page = await self.context.new_page()
+        studio_page = YTStudioPage(page)
+        await studio_page.load_page()
+
+        while input("Enter 'exit' after passing verification: ") != "exit":
+            await page.wait_for_timeout(100)
+        
+        await page.close()
+
+
     def __call__(
-        self, 
+        self,
+        youtube_channel: str, 
         headless: bool = False, 
         proxy: Optional[OrderedDict[str, str]] = None,
         change_language_to_eng: bool = False,
         enable_logging: bool = True,
         **log_file_handler_kwargs
     ):
+        self.youtube_channel = youtube_channel
         self.headless = headless
         self.proxy = proxy
         self.change_language_to_eng = change_language_to_eng
@@ -177,7 +195,7 @@ class Channel:
             exc_val = exc.args[0]
             self.logger.error("%s: %s" % (exc_type.__name__, exc_val), 
                 extra=logadapter(
-                    google_profile=self.profile,
+                    youtube_channel=self.youtube_channel,
                     error_type = exc_type.__name__,
                     error_message = exc_val
             ))

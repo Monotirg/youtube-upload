@@ -34,8 +34,13 @@ class YTDetailsPage(YTPage):
             YTDetailsPage.component.daily_upload_limit_reached_xpath
         )
 
+
         if check_limit is not None:
-            raise YTError("Daily upload reached")
+            check_limit = await self.page.locator(
+                YTDetailsPage.component.daily_upload_limit_reached_xpath
+            ).text_content()
+            print(check_limit)
+            raise YTError(f"Daily upload reached {check_limit}")
         
         return None
 
